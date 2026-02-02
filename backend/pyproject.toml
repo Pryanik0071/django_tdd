@@ -10,5 +10,6 @@ dependencies = [
 
 [dependency-groups]
 test = [
+    "pytest>=9.0.2",
     "selenium>=4.40.0",
 ]
