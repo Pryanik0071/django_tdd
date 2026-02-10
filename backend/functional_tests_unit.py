@@ -17,6 +17,11 @@ class NewVisitorTest(unittest.TestCase):
         """Демонтаж"""
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element(By.ID, 'id_list_table')
+        rows = table.find_elements(By.TAG_NAME, 'tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         """Тест: можно начать список и получить его позже"""
         # Эдит слышала про крутое новое онлайн-приложение со
@@ -38,14 +43,13 @@ class NewVisitorTest(unittest.TestCase):
         )
 
         # Она набирает в текстовом поле - Купить павлинья перья
+        input_box.send_keys('Купить павлинья перья')
+
+        # Когда нажимаем Enter - страница обновляется и теперь появляется элемент списка
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element(By.ID, 'id_list_table')
-        rows = table.find_elements(By.TAG_NAME, 'tr')
-        self.assertTrue(
-            any(row.text == '1: Купить павлинья перья' for row in rows)
-        )
+        self.check_for_row_in_list_table('1: Купить павлинья перья')
 
         self.fail('Закончить тест')
 
