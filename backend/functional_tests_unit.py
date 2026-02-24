@@ -49,7 +49,14 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
 
+        # Добавим еще один элемент - Сделать мушку из перьев
+        input_box = self.browser.find_element(By.ID, 'id_new_item')
+        input_box.send_keys('Сделать мушку из перьев')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
+
         self.check_for_row_in_list_table('1: Купить павлинья перья')
+        self.check_for_row_in_list_table('2: Сделать мушку из перьев')
 
         self.fail('Закончить тест')
 

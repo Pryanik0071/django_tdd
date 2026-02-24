@@ -13,7 +13,7 @@ def browser():
     yield driver
     driver.quit()
 
-
+# TODO: Рефакторинг под актуальный код unit
 def test_can_start_a_list_and_retrieve_it_later(browser):
     """Тест: можно начать список и получить его позже"""
     # Эдит слышала про крутое новое онлайн-приложение со
