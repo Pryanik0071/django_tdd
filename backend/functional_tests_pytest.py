@@ -13,7 +13,14 @@ def browser():
     yield driver
     driver.quit()
 
-# TODO: Рефакторинг под актуальный код unit
+
+def check_for_row_in_list_table(browser, row_text):
+    """Проверка наличия строки в таблице списка"""
+    table = browser.find_element(By.ID, 'id_list_table')
+    rows = table.find_elements(By.TAG_NAME, 'tr')
+    assert row_text in [row.text for row in rows]
+
+
 def test_can_start_a_list_and_retrieve_it_later(browser):
     """Тест: можно начать список и получить его позже"""
     # Эдит слышала про крутое новое онлайн-приложение со
@@ -32,11 +39,19 @@ def test_can_start_a_list_and_retrieve_it_later(browser):
     assert input_box.get_attribute('placeholder') == 'Enter a to-do item'
 
     # Она набирает в текстовом поле - Купить павлинья перья
+    input_box.send_keys('Купить павлинья перья')
+
+    # Когда нажимаем Enter - страница обновляется и теперь появляется элемент списка
     input_box.send_keys(Keys.ENTER)
     time.sleep(1)
 
-    table = browser.find_element(By.ID, 'id_list_table')
-    rows = table.find_elements(By.TAG_NAME, 'tr')
-    assert any(row.text == '1: Купить павлинья перья' for row in rows)
+    # Добавим еще один элемент - Сделать мушку из перьев
+    input_box = browser.find_element(By.ID, 'id_new_item')
+    input_box.send_keys('Сделать мушку из перьев')
+    input_box.send_keys(Keys.ENTER)
+    time.sleep(1)
+
+    check_for_row_in_list_table(browser, '1: Купить павлинья перья')
+    check_for_row_in_list_table(browser, '2: Сделать мушку из перьев')
 
     pytest.fail('Закончить тест')
