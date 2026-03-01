@@ -8,9 +8,19 @@ Some comment
 
 `uv run manage.py test` - Запустить тесты модульные (Django)
 
+`uv run manage.py test functional_tests` - Запуск unit тестов через manage.py и LiveServer Django
+
 Функциональные тесты - проверяют приложени с точки зрения пользователя, внешней стороны
 Модульные - с точки зрения программиста, изнутри
 
 БД для тестов - одна на весь прогон, новая. Но откатывается между тестами (транзакциями)
 
 TDD: Функциональный тест -> Модульный тест -> Прикладной код
+
+run-unit-test: Запуск unit тестов через manage.py и LiveServer Django
+	uv run manage.py test functional_tests_unit
+
+run-pytest-test: Запустить функциональные тесты pytest
+	uv run pytest functional_tests_pytest -v
+
+Запуск всех тестов через manage.py (unit test функциональные + модульные в приложении) - uv run manage.py test (app) - все приложения или app.lists (только приложение lists)
