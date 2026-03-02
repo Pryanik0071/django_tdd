@@ -1,32 +1,35 @@
 import time
 
 import pytest
-from selenium import webdriver
+from selenium.common import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 
-@pytest.fixture
-def browser():
-    """Фикстура браузера"""
-    driver = webdriver.Firefox()
-    yield driver
-    driver.quit()
+MAX_WAIT = 10
 
 
-def check_for_row_in_list_table(browser, row_text):
-    """Проверка наличия строки в таблице списка"""
-    table = browser.find_element(By.ID, 'id_list_table')
-    rows = table.find_elements(By.TAG_NAME, 'tr')
-    assert row_text in [row.text for row in rows]
+def wait_for_row_in_list_table(browser, row_text):
+    """Ожидание строки в таблице списка"""
+    start_time = time.time()
+    while True:
+        try:
+            table = browser.find_element(By.ID, 'id_list_table')
+            rows = table.find_elements(By.TAG_NAME, 'tr')
+            assert row_text in [row.text for row in rows]
+            return
+        except (AssertionError, WebDriverException) as e:
+            if time.time() - start_time > MAX_WAIT:
+                raise e
+            time.sleep(0.5)
 
 
-def test_can_start_a_list_and_retrieve_it_later(browser):
+def test_can_start_a_list_and_retrieve_it_later(browser, live_server):
     """Тест: можно начать список и получить его позже"""
     # Эдит слышала про крутое новое онлайн-приложение со
     # списком неотложных дел. Она решает оценить его
     # домашнюю страницу
-    browser.get('http://localhost:8000')
+    browser.get(live_server.url)
 
     # Она видит, что заголовок и шапка страницы говорят о
     # списках неотложных дел
@@ -43,15 +46,14 @@ def test_can_start_a_list_and_retrieve_it_later(browser):
 
     # Когда нажимаем Enter - страница обновляется и теперь появляется элемент списка
     input_box.send_keys(Keys.ENTER)
-    time.sleep(1)
+    wait_for_row_in_list_table(browser, '1: Купить павлинья перья')
 
     # Добавим еще один элемент - Сделать мушку из перьев
     input_box = browser.find_element(By.ID, 'id_new_item')
     input_box.send_keys('Сделать мушку из перьев')
     input_box.send_keys(Keys.ENTER)
-    time.sleep(1)
 
-    check_for_row_in_list_table(browser, '1: Купить павлинья перья')
-    check_for_row_in_list_table(browser, '2: Сделать мушку из перьев')
+    wait_for_row_in_list_table(browser, '2: Сделать мушку из перьев')
+    wait_for_row_in_list_table(browser, '1: Купить павлинья перья')
 
     pytest.fail('Закончить тест')
