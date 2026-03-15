@@ -18,11 +18,15 @@ Some comment
 TDD: Функциональный тест -> Модульный тест -> Прикладной код
 
 run-unit-test: Запуск unit тестов через manage.py и LiveServer Django
-	uv run manage.py test functional_tests_unit
+uv run manage.py test functional_tests_unit
 
 run-pytest-test: Запустить функциональные тесты pytest
-	uv run pytest functional_tests_pytest -v
+uv run pytest functional_tests_pytest -v
 
 Запуск всех тестов через manage.py (unit test функциональные + модульные в приложении) - uv run manage.py test (app) - все приложения или app.lists (только приложение lists)
 
 LiveServer для изоляции БД во время функциональных тестов + убрали time.sleep(). Автор книги против внутренних функций wait элемента. Но это для Selenium 3, нужно посмотреть, как 4 работает с ожиданием (неявным). Явное ожидание - плохо.
+
+REST - разделение обязанноестей. Каждый URL отвечает за одно дейтсвие
+
+https://www.obeythetestinggoat.com/
