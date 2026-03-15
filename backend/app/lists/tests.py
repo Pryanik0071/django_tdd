@@ -69,12 +69,6 @@ class ListViewTest(TestCase):
         self.assertNotContains(response, 'other list item 1')
         self.assertNotContains(response, 'other list item 2')
 
-    def test_displays_all_items(self):
-        """Отображаются все элементы списка"""
-        list_ = List.objects.create()
-        Item.objects.create(text='item1', list=list_)
-        Item.objects.create(text='item2', list=list_)
-
 
 class NewListTest(TestCase):
     """Тест - Нового списка"""
