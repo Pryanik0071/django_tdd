@@ -4,3 +4,5 @@ db.sqlite3
 CLAUDE.md
 .pyc
 __pycache__/
+.playwright*
+.claude*
