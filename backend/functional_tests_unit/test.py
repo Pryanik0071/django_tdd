@@ -1,5 +1,6 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
+import os
 
 from selenium import webdriver
 from selenium.common import WebDriverException
@@ -30,6 +31,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         """Установка"""
         self.browser = webdriver.Firefox()
+        staging_server = os.environ.get('STAGING_SERVER', self.live_server_url)
+        self.browser.get(staging_server)
 
     def tearDown(self):
         """Демонтаж"""
@@ -40,7 +43,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Эдит слышала про крутое новое онлайн-приложение со
         # списком неотложных дел. Она решает оценить его
         # домашнюю страницу
-        self.browser.get(self.live_server_url)
 
         # Она видит, что заголовак и шапка страницы говорят о
         # списках неотложных дел
@@ -76,7 +78,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def test_multiple_users_can_start_lists_at_different_urls(self):
         """Многочисленные пользователи могут начать списки по разным url"""
         # Эдит начинает новый список
-        self.browser.get(self.live_server_url)
         input_box = self.browser.find_element(By.ID, 'id_new_item')
         input_box.send_keys('Купить павлинья перья')
         input_box.send_keys(Keys.ENTER)
@@ -121,7 +122,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def test_layout_and_styling(self):
         """Макет и стилевое оформление"""
         # Эдит открывает домашнюю страницу
-        self.browser.get(self.live_server_url)
         self.browser.set_window_size(1024, 768)
 
         # Она замечает, что поле ввода аккуратно центрированно

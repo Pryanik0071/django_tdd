@@ -30,7 +30,6 @@ def test_can_start_a_list_for_one_user(browser, live_server):
     # Эдит слышала про крутое новое онлайн-приложение со
     # списком неотложных дел. Она решает оценить его
     # домашнюю страницу
-    browser.get(live_server.url)
 
     # Она видит, что заголовак и шапка страницы говорят о
     # списках неотложных дел
@@ -64,7 +63,6 @@ def test_can_start_a_list_for_one_user(browser, live_server):
 def test_multiple_users_can_start_lists_at_different_urls(browser, live_server):
     """Многочисленные пользователи могут начать списки по разным url"""
     # Эдит начинает новый список
-    browser.get(live_server.url)
     input_box = browser.find_element(By.ID, 'id_new_item')
     input_box.send_keys('Купить павлинья перья')
     input_box.send_keys(Keys.ENTER)
@@ -113,7 +111,6 @@ def test_multiple_users_can_start_lists_at_different_urls(browser, live_server):
 def test_layout_and_styling(browser, live_server):
     """Макет и стилевое оформление"""
     # Эдит открывает домашнюю страницу
-    browser.get(live_server.url)
     browser.set_window_size(1024, 768)
 
     # Она замечает, что поле ввода аккуратно центрированно
