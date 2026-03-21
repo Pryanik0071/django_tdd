@@ -30,3 +30,32 @@ LiveServer для изоляции БД во время функциональн
 REST - разделение обязанноестей. Каждый URL отвечает за одно дейтсвие
 
 https://www.obeythetestinggoat.com/
+
+## Nginx
++ apt-get install nginx
++ systemctl start nginx
+
+**Path to save - /etc/nginx/sites-available**
+```nginx -
+    server {
+        listen 80;
+        server_name domain_name;
+        
+        location / {
+            proxy_pass http://localhost:8000;
+        }
+    } 
+```
+
+Веб-сервер будет прослушивать только наш домен и проксировать все запросы на localhost
+
++ echo $SITENAME
++ ln -s ../sites-available/$SITENAME /etc/nginx/sites-enabled/$SITENAME
+
+Это сохранени конфигурации Nginx - реальный файл лежит в available, а символьная ссылка в enabled
+
+Удалить default!
+
++ systemctl reload nginx
+
+Запустить службу + сервер
