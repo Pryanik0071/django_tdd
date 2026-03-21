@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn server for our app (domain) / other?
+
+[Service]
+Restart=on-failure
+User=our_user
+WorkingDirectory=Текущий рабочий каталог ? app/source?
+ExecStart=оманда запуска gunicorn?
+
+[Install]
+WantedBy=multt-user.targer - Служба запускалась на начальной загрузке

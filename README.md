@@ -80,7 +80,7 @@ https://www.obeythetestinggoat.com/
 ```nginx
     
     location / {
-        proxy_set_heade Host $host;
+        proxy_set_header Host $host;
         proxy_pass http://unix:/tmp/$SITENAME.socket;
     }
 ```
@@ -92,7 +92,7 @@ https://www.obeythetestinggoat.com/
 /etc/systemd/system/gunicorn-add
 
 ```systemd
-    [unit]
+    [Unit]
     Description=Gunicorn server for our app (domain) / other?
     
     [Service]
@@ -111,3 +111,28 @@ https://www.obeythetestinggoat.com/
 + systemctl daemon-reload
 + systemctl enable (service_name)
 + systemctl start (service_name)
+
+## Fabric (deprecated)
+Fabric — Python-библиотека для выполнения команд на удалённых серверах по SSH.
+
+Суть простая:
+- Пишешь Python-функции (tasks), внутри которых — shell-команды
+- Fabric подключается к серверу по SSH и выполняет их
+- По сути — скриптовая обёртка над ssh user@server "команда"
+
+Пример из книги (Fabric 1):
+from fabric.api import run, env
+
+env.host = 'user@server'
+
+def deploy():
+  run('cd /home/user/sites/app && git pull')
+  run('uv sync')
+  run('python manage.py migrate')
+  run('systemctl restart gunicorn')
+
+Что важно понять из главы:
+
+1. Автоматизация деплоя — деплой не должен быть ручным набором команд. Одна команда = полный деплой
+2. Идемпотентность — скрипт можно запускать повторно без побочных эффектов
+3. Воспроизводимость — новый сервер настраивается так же, как текущий
