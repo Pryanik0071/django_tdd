@@ -1,42 +1,12 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-import time
-import os
-
 from selenium import webdriver
-from selenium.common import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from .base import FunctionalTest
 
-MAX_WAIT = 10
 
-
-class NewVisitorTest(StaticLiveServerTestCase):
+class NewVisitorTest(FunctionalTest):
     """Тест нового посетителя"""
-
-    def wait_for_row_in_list_table(self, row_text):
-        """Ожидание строки в таблице списка"""
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element(By.ID, 'id_list_table')
-                rows = table.find_elements(By.TAG_NAME, 'tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
-
-    def setUp(self):
-        """Установка"""
-        self.browser = webdriver.Firefox()
-        staging_server = os.environ.get('STAGING_SERVER', self.live_server_url)
-        self.browser.get(staging_server)
-
-    def tearDown(self):
-        """Демонтаж"""
-        self.browser.quit()
 
     def test_can_start_a_list_for_one_user(self):
         """Можно начать список для одного пользователя"""
@@ -118,28 +88,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('Купить молоко', page_text)
 
         # Удовлетворенные, они оба ложатся спать
-
-    def test_layout_and_styling(self):
-        """Макет и стилевое оформление"""
-        # Эдит открывает домашнюю страницу
-        self.browser.set_window_size(1024, 768)
-
-        # Она замечает, что поле ввода аккуратно центрированно
-        input_box = self.browser.find_element(By.ID, 'id_new_item')
-        self.assertAlmostEqual(
-            input_box.location["x"] + input_box.size["width"] / 2,
-            512,
-            delta=10,
-        )
-
-        # Она начинает новый и список и видит, что поле ввода там тоже центрировано
-        # centered there too
-        input_box.send_keys("testing")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: testing")
-        input_box = self.browser.find_element(By.ID, "id_new_item")
-        self.assertAlmostEqual(
-            input_box.location["x"] + input_box.size["width"] / 2,
-            512,
-            delta=10,
-        )
