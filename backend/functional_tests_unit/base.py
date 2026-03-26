@@ -1,11 +1,10 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import os
 import time
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common import WebDriverException
 from selenium.webdriver.common.by import By
-
 
 MAX_WAIT = 10
 
@@ -16,7 +15,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         """Установка"""
         self.browser = webdriver.Firefox()
-        staging_server = os.environ.get('STAGING_SERVER', self.live_server_url)
+        staging_server = os.environ.get("STAGING_SERVER", self.live_server_url)
         self.browser.get(staging_server)
 
     def tearDown(self):
@@ -28,8 +27,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         start_time = time.time()
         while True:
             try:
-                table = self.browser.find_element(By.ID, 'id_list_table')
-                rows = table.find_elements(By.TAG_NAME, 'tr')
+                table = self.browser.find_element(By.ID, "id_list_table")
+                rows = table.find_elements(By.TAG_NAME, "tr")
                 self.assertIn(row_text, [row.text for row in rows])
                 return
             except (AssertionError, WebDriverException) as e:
