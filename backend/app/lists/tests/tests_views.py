@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.utils.html import escape
 
+from lists.forms import EMPTY_ITEM_ERROR, ItemForm
 from lists.models import Item, List
-from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 
 
 class HomePageTest(TestCase):

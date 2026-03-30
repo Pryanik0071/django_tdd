@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.common import WebDriverException
 from selenium.webdriver.common.by import By
 
-MAX_WAIT = 10
+MAX_WAIT = 2
 
 
 @pytest.fixture
@@ -17,6 +17,11 @@ def browser(live_server):
     driver.get(staging_server)
     yield driver
     driver.quit()
+
+
+def get_item_input_box(browser):
+    """Получить поле ввода для элемента"""
+    return browser.find_element(By.ID, "id_text")
 
 
 def wait_for_row_in_list_table(browser, row_text):
@@ -34,7 +39,7 @@ def wait_for_row_in_list_table(browser, row_text):
             time.sleep(0.5)
 
 
-def wait_for(browser, fn):
+def wait_for(fn):
     """Ожидание"""
     start_time = time.time()
     while True:

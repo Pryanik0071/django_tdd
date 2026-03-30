@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from .conftest import wait_for_row_in_list_table
+from .conftest import get_item_input_box, wait_for_row_in_list_table
 
 
 def test_can_start_a_list_for_one_user(browser, live_server):
@@ -18,7 +18,7 @@ def test_can_start_a_list_for_one_user(browser, live_server):
     assert "To-Do" in header_text
 
     # Ей сразу же предлагается ввести элемент списка
-    input_box = browser.find_element(By.ID, "id_new_item")
+    input_box = get_item_input_box(browser)
     assert input_box.get_attribute("placeholder") == "Enter a to-do item"
 
     # Она набирает в текстовом поле - Купить павлинья перья
@@ -29,7 +29,7 @@ def test_can_start_a_list_for_one_user(browser, live_server):
     wait_for_row_in_list_table(browser, "1: Купить павлинья перья")
 
     # Добавим еще один элемент - Сделать мушку из перьев
-    input_box = browser.find_element(By.ID, "id_new_item")
+    input_box = get_item_input_box(browser)
     input_box.send_keys("Сделать мушку из перьев")
     input_box.send_keys(Keys.ENTER)
 
@@ -43,7 +43,7 @@ def test_can_start_a_list_for_one_user(browser, live_server):
 def test_multiple_users_can_start_lists_at_different_urls(browser, live_server):
     """Многочисленные пользователи могут начать списки по разным url"""
     # Эдит начинает новый список
-    input_box = browser.find_element(By.ID, "id_new_item")
+    input_box = get_item_input_box(browser)
     input_box.send_keys("Купить павлинья перья")
     input_box.send_keys(Keys.ENTER)
     wait_for_row_in_list_table(browser, "1: Купить павлинья перья")
@@ -68,7 +68,7 @@ def test_multiple_users_can_start_lists_at_different_urls(browser, live_server):
 
         # Фрэнсис начинает новый список, вводя новый элемент. Он менее
         # интересен, чем список Эдит...
-        input_box = browser.find_element(By.ID, "id_new_item")
+        input_box = get_item_input_box(browser)
         input_box.send_keys("Купить молоко")
         input_box.send_keys(Keys.ENTER)
         wait_for_row_in_list_table(browser, "1: Купить молоко")
